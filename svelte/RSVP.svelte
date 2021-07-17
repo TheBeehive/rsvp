@@ -1,12 +1,13 @@
 <script>
   import Toggle from "./Toggle.svelte"
-  import TogglePrompt from "./TogglePrompt.svelte"
 
   const name = "Tony Thomas"
   const plusname = "Brook Osborne"
   const invited_to_brunch = true
 
-  let reception
+  import { saveable } from "./saveable.js"
+
+  let reception = saveable("reception")
   let vaxxed
   let mask
 
@@ -41,26 +42,26 @@
 
   <p>The ceremony and reception will take place at the <a href="https://computerhistory.org/" target=_blank>Computer History Museum</a> on Saturday, October 23<sup>rd</sup> at 05:30 PM PDT. The dress code is black tie optional. This will be an adults-only (21+) celebration.</p>
 
-  <iframe height="450" style="border: 0; width: 100%;" loading="lazy" allowfullscreen src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJm7NJkla3j4AR8vR-HWRxgOo&key=AIzaSyAUU6DgJ-dorKgFb0XMCZ8qACjCRkcXY70"></iframe> 
+  <!--<iframe height="450" style="border: 0; width: 100%;" loading="lazy" allowfullscreen src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJm7NJkla3j4AR8vR-HWRxgOo&key=AIzaSyAUU6DgJ-dorKgFb0XMCZ8qACjCRkcXY70"></iframe>-->
 
-  <TogglePrompt name="reception" bind:result={reception}>
+  <Toggle name="reception" bind:result={$reception}>
     <p class="question">I will attend the wedding ceremony and reception</p>
-  </TogglePrompt>
+  </Toggle>
 
-  {#if reception}
+  {#if $reception}
     <p>
       <textarea style="resize: vertical;" placeholder="Please let us know if you have any allergies or dietary restrictions..." />
     </p>
 
-    <TogglePrompt name="vaxxed" bind:result={vaxxed}>
+    <Toggle name="vaxxed" bind:result={vaxxed}>
       <p class="question">I am fully vaccinated for COVID-19</p>
-    </TogglePrompt>
+    </Toggle>
 
     {#if vaxxed == 0}
       The <a href="https://www.cdph.ca.gov/" target=_blank>California Department of Public Health</a> requires unvaccinated individuals to wear masks in indoor public settings. Masks may be removed when outside, or when eating or drinking. <a href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/COVID-19/guidance-for-face-coverings.aspx#asterisknew" target=_blank>More Information</a>
-      <TogglePrompt name="mask" bind:result={mask}>
+      <Toggle name="mask" bind:result={mask}>
         <p class="question">I will wear a mask inside the museum, except when eating or drinking</p>
-      </TogglePrompt>
+      </Toggle>
 
       {#if mask == 0}
         <p>We're sorry but you can't come</p>
@@ -68,21 +69,21 @@
     {/if}
   {/if}
 
-  {#if reception && (vaxxed || !vaxxed && mask)}
+  {#if $reception && (vaxxed || !vaxxed && mask)}
     <h2>Cocktail Reception</h2>
 
     <p>You're welcome to attend a cocktail reception at <a href="https://vinolocale.org/" target=_blank>Vino Locale</a> on Friday, October 22<sup>nd</sup>, the day before the wedding, at 07:00 PM PDT.</p>
 
-    <iframe height="450" style="border: 0; width: 100%;" loading="lazy" allowfullscreen src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJ2S5OXzi7j4ARGnV-XOyU-4g&key=AIzaSyAUU6DgJ-dorKgFb0XMCZ8qACjCRkcXY70"></iframe> 
+    <!--<iframe height="450" style="border: 0; width: 100%;" loading="lazy" allowfullscreen src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJ2S5OXzi7j4ARGnV-XOyU-4g&key=AIzaSyAUU6DgJ-dorKgFb0XMCZ8qACjCRkcXY70"></iframe>-->
 
-    <TogglePrompt name="cocktail" bind:result={cocktail}>
+    <Toggle name="cocktail" bind:result={cocktail}>
       <p class="question">I will attend the cocktail reception</p>
-    </TogglePrompt>
+    </Toggle>
 
     {#if cocktail}
-      <TogglePrompt name="cocktail_excess" bind:result={cocktail_excess}>
+      <Toggle name="cocktail_excess" bind:result={cocktail_excess}>
         <p class="question">Will you bring any guests other than {plusname}?</p>
-      </TogglePrompt>
+      </Toggle>
 
       {#if cocktail_excess}
         <p>How many guests will you bring, excluding {plusname}?</p>
@@ -94,9 +95,9 @@
 
     <p>If there's enough interest, we'll organize a group hike the morning of our wedding.</p>
 
-    <TogglePrompt name="hike" bind:result={hike}>
+    <Toggle name="hike" bind:result={hike}>
       <p class="question">I'm interested in going on the group hike</p>
-    </TogglePrompt>
+    </Toggle>
 
     {#if hike}
       <p>My phone number</p>
@@ -108,11 +109,11 @@
 
       <p>You're invited to brunch at <a href="https://changan-artisan-noodle.business.site/" target=_blank>Chang'an Artisan Noodle</a> on Sunday, October 24<sup>th</sup>, the day after the wedding, at 11:00 AM PDT.</p>
 
-      <iframe height="450" style="border: 0; width: 100%;" loading="lazy" allowfullscreen src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJ6X3Saaiwj4AR-ixm6fKP-rI&key=AIzaSyAUU6DgJ-dorKgFb0XMCZ8qACjCRkcXY70"></iframe> 
+      <!--<iframe height="450" style="border: 0; width: 100%;" loading="lazy" allowfullscreen src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJ6X3Saaiwj4AR-ixm6fKP-rI&key=AIzaSyAUU6DgJ-dorKgFb0XMCZ8qACjCRkcXY70"></iframe>-->
 
-      <TogglePrompt name="brunch" bind:result={brunch}>
+      <Toggle name="brunch" bind:result={brunch}>
         <p class="question">I will attend brunch</p>
-      </TogglePrompt>
+      </Toggle>
     {/if}
   {/if}
 
