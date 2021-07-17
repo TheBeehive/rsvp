@@ -2,14 +2,13 @@
   import Toggle from "./Toggle.svelte"
   import TogglePrompt from "./TogglePrompt.svelte"
 
-  let name = "Tony Thomas"
-  let plusname = "Brook Osborne"
-  let invited_to_brunch = true
+  const name = "Tony Thomas"
+  const plusname = "Brook Osborne"
+  const invited_to_brunch = true
 
   let reception
   let vaxxed
   let mask
-  $: reception_actual = reception && (vaxxed || !vaxxed && mask)
 
   let cocktail
   let cocktail_excess
@@ -69,7 +68,7 @@
     {/if}
   {/if}
 
-  {#if reception_actual}
+  {#if reception && (vaxxed || !vaxxed && mask)}
     <h2>Cocktail Reception</h2>
 
     <p>You're welcome to attend a cocktail reception at <a href="https://vinolocale.org/" target=_blank>Vino Locale</a> on Friday, October 22<sup>nd</sup>, the day before the wedding, at 07:00 PM PDT.</p>
