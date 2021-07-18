@@ -1,8 +1,8 @@
 from flask import Flask
 from flask import request, make_response, abort
-from database import *
+from rsvp.database import *
+from rsvp.resource import *
 import json
-from dateutil import parser
 
 app = Flask(__name__)
 
@@ -41,28 +41,13 @@ def post_rsvp(guest_id):
     if guest is None:
         abort(404)
 
-    f = request.form
+    schema = RSVPSchema()
+    rsvp_data = schema.load(request.form)
+    rsvp_data['guest_id'] = guest_id
 
-    rsvp = RSVP (
-        guest_id = guest_id,
-        wedding = f['wedding'] == 'TRUE',
-        cocktails = f['cocktails'] == 'TRUE',
-        hike = f['hike'] == 'TRUE'
-    )
-    brunch = f.get('brunch')
-    rsvp.brunch = brunch == 'TRUE' if brunch else None
-
-    rsvp.phone = f.get('phone')
-    rsvp.cocktails_excess = f.get('cocktails_excess')
-
-    vaxxed = f.get('vaxxed')
-    masked = f.get('masked')
-    rsvp.vaxxed = vaxxed == 'TRUE' if vaxxed else None
-    rsvp.masked = masked == 'TRUE' if masked else None
+    rsvp = RSVP(**rsvp_data)
 
     Session.add(rsvp)
     Session.commit()
 
     return ''
-
-# TODO: Marshallow
