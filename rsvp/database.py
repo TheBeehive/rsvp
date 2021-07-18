@@ -1,7 +1,7 @@
 from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import relationship, sessionmaker, scoped_session
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, Boolean, FetchedValue
+from sqlalchemy import Column, Integer, String, Boolean, FetchedValue, ForeignKey
 
 Base = declarative_base()
 engine = create_engine('postgresql:///rsvp')
@@ -29,7 +29,9 @@ class RSVP(Base):
     id = Column(Integer, primary_key=True,
                       server_default=FetchedValue())
 
-    guest_id = Column(Integer)
+    guest_id = Column(Integer, ForeignKey("guest.id"))
+    guest = relationship(Guest)
+
     brunch = Column(Boolean)
     wedding = Column(Boolean, nullable=False)
     vaxxed = Column(Boolean)
