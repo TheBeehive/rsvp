@@ -1,0 +1,12 @@
+[Unit]
+Description=Gunicorn instance of RSVP application
+After=network.target
+
+[Service]
+User=rsvp
+Group=rsvp
+WorkingDirectory=/home/rsvp/rsvp
+ExecStart=/home/rsvp/rsvp/.local/bin/gunicorn -b unix:gunicorn.sock -m 0111 -w4 wsgi:app
+
+[Install]
+WantedBy=multi-user.target

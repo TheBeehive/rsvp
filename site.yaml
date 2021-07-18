@@ -1,0 +1,59 @@
+- name: Deploy the site from the latest commit in TheBeehive/rsvp
+  hosts: all
+  tasks:
+  - name: Install Git, Python 3, pip, npm, and nginx
+    become: yes
+    ansible.builtin.apt:
+      name: [git, python3, python3-pip, npm, nginx]
+
+  - name: Retrieve the latest code from GitHub
+    git: repo=https://github.com/TheBeehive/rsvp.git dest=rsvp
+    notify: Restart RSVP service
+
+  - name: Install Python 3 dependencies
+    pip: chdir=rsvp requirements=requirements.txt
+    notify: Restart RSVP service
+
+  - name: Install JavaScript dependencies
+    npm: path=rsvp production=yes
+
+  - name: Install the RSVP service unit file
+    become: yes
+    copy: src=deployment/rsvp.service dest=/etc/systemd/system/rsvp.service
+    notify:
+    - Reload systemd daemon
+    - Restart RSVP service
+
+  - name: Remove the default site in nginx
+    become: yes
+    file: path=/etc/nginx/sites-enabled/default state=absent
+    notify: Reload nginx server
+
+  - name: Copy the RSVP site configuration to sites-available
+    become: yes
+    copy: src=deployment/site.conf dest=/etc/nginx/sites-available/rsvp
+    notify: Reload nginx server
+
+  - name: Enable the RSVP site
+    become: yes
+    ansible.builtin.file:
+      src: /etc/nginx/sites-available/rsvp
+      dest: /etc/nginx/sites-enabled/rsvp
+      state: link
+    notify: Reload nginx server
+
+  handlers:
+  - name: Reload systemd daemon
+    become: yes
+    systemd: daemon-reload=yes
+    listen: Reload systemd daemon
+
+  - name: Restart RSVP service
+    become: yes
+    systemd: name=rsvp state=restarted
+    listen: Reload RSVP service
+
+  - name: Reload nginx server
+    become: yes
+    systemd: name=nginx state=reloaded
+    listen: Reload nginx server
