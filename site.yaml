@@ -8,7 +8,9 @@
 
   - name: Retrieve the latest code from GitHub
     git: repo=https://github.com/TheBeehive/rsvp.git dest=rsvp
-    notify: Restart RSVP service
+    notify:
+    - Restart RSVP service
+    - Recompile svelte application
 
   - name: Install Python 3 dependencies
     pip: chdir=rsvp requirements=requirements.txt
@@ -43,6 +45,12 @@
     notify: Reload nginx server
 
   handlers:
+  - name: Recompile svelte application
+    command: npm run build
+    args:
+      chdir: rsvp
+    listen: Recompile svelte application
+
   - name: Reload systemd daemon
     become: yes
     systemd: daemon-reload=yes
