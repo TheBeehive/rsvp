@@ -124,10 +124,4 @@
   .question {
     font-weight: bold;
   }
-
-  main {
-    margin: 0 auto;
-    padding: 1em;
-    max-width: 640px;
-  }
 </style>
