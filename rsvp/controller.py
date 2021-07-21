@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request, make_response, abort
+from sqlalchemy.orm.exc import NoResultFound
 from rsvp.database import *
 from rsvp.resource import *
 import json
@@ -10,11 +11,13 @@ app = Flask(__name__)
 def welcome():
     return "<p>Welcome to Kai and Mel's RSVP. Use your URL to RSVP.</p>"
 
+@app.errorhandler(NoResultFound)
+def handle_no_result_found(exception):
+    return 'No guest with that id found', 404
+
 @app.route('/rsvp/<int:guest_id>')
 def get_rsvp(guest_id):
-    guest = Guest.query.get(guest_id)
-    if guest is None:
-        abort(404)
+    guest = Guest.query.filter_by(id=guest_id).one()
 
     response = {}
 
@@ -37,9 +40,7 @@ def get_rsvp(guest_id):
 
 @app.route('/rsvp/<int:guest_id>', methods=['POST'])
 def post_rsvp(guest_id):
-    guest = Guest.query.get(guest_id)
-    if guest is None:
-        abort(404)
+    guest = Guest.query.filter_by(id=guest_id).one()
 
     schema = RSVPSchema()
     rsvp_data = schema.load(request.form)
