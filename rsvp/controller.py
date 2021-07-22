@@ -16,9 +16,8 @@ def handle_no_result_found(exception):
     return 'No guest with that id found', 404
 
 @app.route('/rsvp/<int:guest_id>')
-def get_rsvp(guest_id):
-    guest = Guest.query.filter_by(id=guest_id).one()
-
+@retrieve_guest
+def get_rsvp(guest):
     response = {}
 
     plus_one = Guest.query.get(guest.plus_one) if guest.plus_one else None
@@ -39,9 +38,8 @@ def get_rsvp(guest_id):
     return json.dumps(response)
 
 @app.route('/rsvp/<int:guest_id>', methods=['POST'])
-def post_rsvp(guest_id):
-    guest = Guest.query.filter_by(id=guest_id).one()
-
+@retrieve_guest
+def post_rsvp(guest):
     schema = RSVPSchema()
     rsvp_data = schema.load(request.form)
     rsvp_data['guest_id'] = guest_id
