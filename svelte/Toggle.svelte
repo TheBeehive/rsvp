@@ -25,15 +25,21 @@
     justify-content: space-between;
   }
 
+  label {
+    border: 1px solid #aaaaaa;
+  }
+
   input[type="radio"]:checked + label {
     color: #ffffff;
   }
 
   input.toggle-1:checked + label {
     background: #2ecc40;
+    border: 1px solid #2ecc40;
   }
 
   input.toggle-0:checked + label {
     background: #ff4136;
+    border: 1px solid #ff4136;
   }
 </style>

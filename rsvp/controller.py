@@ -1,54 +1,55 @@
-from flask import Flask
-from flask import request, make_response, abort
+from flask import Flask, request, make_response, abort, render_template
+from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.exc import NoResultFound
-from rsvp.database import *
+from rsvp.database import Session, Guest, RSVP
 from rsvp.resource import *
 import json
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/')
 
 @app.route('/')
 def welcome():
     return "<p>Welcome to Kai and Mel's RSVP. Use your URL to RSVP.</p>"
 
+@app.errorhandler(404)
+def handle_404(e):
+    return app.send_static_file('404.html')
+
 @app.errorhandler(NoResultFound)
 def handle_no_result_found(exception):
-    return 'No guest with that id found', 404
+    abort(404)
 
 @app.route('/rsvp/<int:guest_id>')
 def get_rsvp(guest_id):
-    guest = Guest.query.filter_by(id=guest_id).one()
-
-    response = {}
-
-    plus_one = Guest.query.get(guest.plus_one) if guest.plus_one else None
-    response['name'] = guest.name
-    response['plus_one'] = plus_one.name if plus_one else None
-    response['email'] = guest.email
+    guest = Guest.query.filter_by(id=guest_id) \
+        .options(joinedload(Guest.plus_one)) \
+        .one()
 
     rsvp = RSVP.query.filter(RSVP.guest_id == guest_id) \
         .distinct(RSVP.guest_id) \
         .order_by(RSVP.guest_id, RSVP.submitted_at.desc()) \
         .one_or_none()
 
-    response['cocktails'] = rsvp.cocktails if rsvp else None
-    response['hike'] = rsvp.hike if rsvp else None
-    response['wedding'] = rsvp.wedding if rsvp else None
-    response['brunch'] = rsvp.brunch if rsvp else None
+    rsvp_info = {
+        'name': guest.name,
+        'plusname': guest.plus_one.name if guest.plus_one else None,
+        'email': guest.email,
+        'invited_to_brunch': guest.invited_to_brunch,
+    }
+    if rsvp is not None:
+        rsvp_info.update(RSVPSchema().dump(rsvp))
+    print(rsvp_info)
 
-    return json.dumps(response)
+    return render_template("index.html", rsvp_info=rsvp_info)
 
 @app.route('/rsvp/<int:guest_id>', methods=['POST'])
 def post_rsvp(guest_id):
-    guest = Guest.query.filter_by(id=guest_id).one()
-
-    schema = RSVPSchema()
-    rsvp_data = schema.load(request.form)
-    rsvp_data['guest_id'] = guest_id
-
-    rsvp = RSVP(**rsvp_data)
-
+    guest = Guest.query.filter_by(id=guest_id) \
+            .with_for_update(read=False, key_share=True) \
+            .one()
+    rsvp = RSVP(guest=guest, **RSVPSchema().load(request.form))
     Session.add(rsvp)
+
     Session.commit()
 
     return ''

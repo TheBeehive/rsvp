@@ -2,9 +2,7 @@ import RSVP from './RSVP.svelte';
 
 const rsvp = new RSVP({
   target: document.body,
-  props: {
-    name: 'world'
-  }
+  props: { 'rsvp_info': document.rsvp_info },
 });
 
 export default rsvp;

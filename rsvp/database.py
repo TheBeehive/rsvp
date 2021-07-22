@@ -1,37 +1,39 @@
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker, scoped_session
-from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, Boolean, FetchedValue, ForeignKey
+from sqlalchemy.orm import (
+    declarative_base, relationship, sessionmaker, scoped_session)
+from sqlalchemy import (
+    create_engine, Column, Integer, String, Boolean, FetchedValue,
+    ForeignKey)
+
+__all__ = ("Session", "Guest", "RSVP")
 
 Base = declarative_base()
 engine = create_engine('postgresql:///rsvp')
 Base.metadata.create_all(engine)
 Session = scoped_session(sessionmaker(engine))
 
+
 class Guest(Base):
     __tablename__ = 'guest'
 
-    id = Column(Integer, primary_key=True,
-                      server_default=FetchedValue())
-    name = Column(String)
-    plus_one = Column(Integer)
+    id = Column(Integer, primary_key=True, server_default=FetchedValue())
+    name = Column(String, nullable=False)
+    plus_one_id = Column(Integer, ForeignKey('guest.id'))
     email = Column(String, nullable=False)
     invited_to_brunch = Column(Boolean, nullable=False)
+
+    plus_one = relationship('Guest', remote_side=[id])
+    rsvps = relationship('RSVP', back_populates='guest')
 
     query = Session.query_property()
 
     def __repr__(self):
-        return f'<Guest guest_id={self.id!r}, name={self.name!r}>'
+        return f'<Guest id={self.id!r} name={self.name!r}>'
 
 class RSVP(Base):
     __tablename__ = 'rsvp'
 
-    id = Column(Integer, primary_key=True,
-                      server_default=FetchedValue())
-
-    guest_id = Column(Integer, ForeignKey("guest.id"))
-    guest = relationship(Guest)
-
+    id = Column(Integer, primary_key=True, server_default=FetchedValue())
+    guest_id = Column(Integer, ForeignKey('guest.id'))
     brunch = Column(Boolean)
     wedding = Column(Boolean, nullable=False)
     vaxxed = Column(Boolean)
@@ -40,10 +42,11 @@ class RSVP(Base):
     phone = Column(String)
     cocktails = Column(Boolean, nullable=False)
     cocktails_excess = Column(Integer)
-
     submitted_at = Column(Integer, server_default=FetchedValue())
+
+    guest = relationship(Guest, back_populates='rsvps')
 
     query = Session.query_property()
 
     def __repr__(self):
-        return f'<RSVP id={self.id!r}, guest_id={self.guest_id!r}>'
+        return f'<RSVP id={self.id!r} guest_id={self.guest_id!r}>'

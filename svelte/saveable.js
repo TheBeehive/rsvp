@@ -1,7 +1,9 @@
 import { writable } from 'svelte/store'
 
-export function saveable(name) {
-  const data = JSON.parse(localStorage.getItem(name))
+export function saveable(name, server_side) {
+  const data = server_side != null ?
+    server_side : JSON.parse(localStorage.getItem(name))
+
   const { subscribe, set, update } = writable(data)
   return { subscribe, set: data => {
     set(data)

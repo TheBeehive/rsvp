@@ -1,7 +1,26 @@
+a:hover {
+  text-decoration: underline;
+}
+
 main {
   margin: 0 auto;
   padding: 1em;
-  max-width: 640px;
+  max-width: 768px;
 }
 
-a:hover { text-decoration: underline; }
+dl, dt, dd {
+  margin: 0;
+}
+
+fieldset {
+  margin: 0;
+  border: 0;
+  padding: 1rem;
+
+  border-radius: .2rem;
+  background: #f5f2f0;
+}
+
+textarea {
+  resize: vertical;
+}
