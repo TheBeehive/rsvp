@@ -9,18 +9,25 @@ main {
 }
 
 dl, dt, dd {
+  border: 0;
   margin: 0;
+  padding: 0;
 }
 
 fieldset {
-  margin: 0;
   border: 0;
-  padding: 1rem;
-
-  border-radius: .2rem;
-  background: #f5f2f0;
+  margin: 0;
+  padding: 0;
 }
 
 textarea {
   resize: vertical;
+}
+
+.prompt {
+  display: flex;
+  align-content: flex-start;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }

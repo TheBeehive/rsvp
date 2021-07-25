@@ -18,13 +18,6 @@
 </div>
 
 <style>
-  .prompt {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-  }
-
   label {
     border: 1px solid #aaaaaa;
   }

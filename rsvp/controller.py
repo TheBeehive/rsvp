@@ -38,7 +38,6 @@ def get_rsvp(guest_id):
     }
     if rsvp is not None:
         rsvp_info.update(RSVPSchema().dump(rsvp))
-    print(rsvp_info)
 
     return render_template("index.html", rsvp_info=rsvp_info)
 
