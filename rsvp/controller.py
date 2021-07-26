@@ -1,9 +1,9 @@
 from flask import Flask, request, make_response, abort, render_template
+from marshmallow import EXCLUDE
+from rsvp.database import Session, Guest, RSVP
+from rsvp.resource import RSVPSchema
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.exc import NoResultFound
-from rsvp.database import Session, Guest, RSVP
-from rsvp.resource import *
-import json
 
 app = Flask(__name__, static_url_path='/')
 
@@ -43,12 +43,22 @@ def get_rsvp(guest_id):
 
 @app.route('/rsvp/<int:guest_id>', methods=['POST'])
 def post_rsvp(guest_id):
+    schema = RSVPSchema(unknown=EXCLUDE)
+
     guest = Guest.query.filter_by(id=guest_id) \
             .with_for_update(read=False, key_share=True) \
             .one()
-    rsvp = RSVP(guest=guest, **RSVPSchema().load(request.form))
+    rsvp = RSVP(guest=guest, **schema.load(request.form))
     Session.add(rsvp)
 
     Session.commit()
 
-    return ''
+    rsvp_info = {
+        'name': guest.name,
+        'plusname': guest.plus_one.name if guest.plus_one else None,
+        'email': guest.email,
+        'invited_to_brunch': guest.invited_to_brunch,
+    }
+    rsvp_info.update(schema.dump(rsvp))
+
+    return render_template("index.html", rsvp_info=rsvp_info)

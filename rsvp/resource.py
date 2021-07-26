@@ -1,6 +1,8 @@
 from marshmallow import Schema
 from marshmallow.fields import Field, Integer, String
 
+__all__ = ("RSVPSchema",)
+
 
 class NumberBool(Field):
     default_error_messages = {"invalid": "Not a valid boolean."}
