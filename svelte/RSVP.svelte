@@ -142,8 +142,14 @@
           <input type=hidden name="cocktail_excess" value={cocktail_excess}>
 
           {#if $cocktail_switch}
-            <p class="question">How many guests will you bring, excluding {plusname}?</p>
-            <input type=number name={cocktail_number.name} bind:value={$cocktail_number} required>
+            <div class="prompt">
+              <p class="question">How many guests will you bring, excluding {plusname}?</p>
+              <select name={cocktail_number.name} bind:value={$cocktail_number} required>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+              </select>
+            </div>
           {/if}
         {/if}
       </fieldset>
@@ -256,7 +262,11 @@
     font-weight: bold;
   }
 
-  input {
+  input, select {
     width: auto;
+  }
+
+  select {
+    padding-right: 1.2em;
   }
 </style>
