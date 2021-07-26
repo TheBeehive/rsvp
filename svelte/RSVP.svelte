@@ -26,8 +26,8 @@
       $cocktail != null || $cocktail_switch != null || $cocktail_number != null)
   let cocktail = saveable("cocktail", rsvp_info.cocktail)
   let cocktail_switch = saveable("cocktail_switch",
-      Number(rsvp_info.cocktail_number > 0))
-  let cocktail_number = saveable("cocktail_number", rsvp_info.cocktail_number)
+      Number(rsvp_info.cocktail_excess > 0))
+  let cocktail_number = saveable("cocktail_number", rsvp_info.cocktail_excess)
   $: cocktail_excess = !$cocktail_switch ? 0 : $cocktail_number
   $: done_to_cocktail = done_to_reception && (
       $cocktail == 1 && $cocktail_switch == 0 ||
