@@ -4,8 +4,10 @@ from rsvp.database import Session, Guest, RSVP
 from rsvp.resource import RSVPSchema
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.exc import NoResultFound
+import os
 
-app = Flask(__name__, static_url_path='/')
+root = os.path.realpath(os.path.join(__file__, '..', '..'))
+app = Flask(__name__, static_url_path='/', root_path=root)
 
 @app.route('/')
 def welcome():
@@ -17,7 +19,7 @@ def handle_404(e):
 
 @app.errorhandler(NoResultFound)
 def handle_no_result_found(exception):
-    abort(404)
+    return app.send_static_file('404.html')
 
 @app.route('/rsvp/<int:guest_id>')
 def get_rsvp(guest_id):
