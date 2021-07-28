@@ -33,7 +33,7 @@ def get_rsvp(secret_id):
         'name': guest.name,
         'plusname': guest.plus_one.name if guest.plus_one else None,
         'email': guest.email,
-        'invited_to_brunch': guest.invited_to_brunch,
+        'noods': guest.invited_to_brunch,
     }
     if rsvp is not None:
         rsvp_info.update(RSVPSchema().dump(rsvp))
@@ -57,7 +57,7 @@ def post_rsvp(secret_id):
         'name': guest.name,
         'plusname': guest.plus_one.name if guest.plus_one else None,
         'email': guest.email,
-        'invited_to_brunch': guest.invited_to_brunch,
+        'noods': guest.invited_to_brunch,
     }
     rsvp_info.update(schema.dump(rsvp))
 

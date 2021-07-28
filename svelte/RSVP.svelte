@@ -7,7 +7,7 @@
 
   let name = rsvp_info.name
   let plusname = rsvp_info.plusname
-  let invited_to_brunch = rsvp_info.invited_to_brunch
+  let noods = rsvp_info.noods
 
   // Ceremony and Reception //
   // ====================== //
@@ -48,7 +48,7 @@
   // ====== //
   $: show_brunch = attend && (done_to_hike || $brunch != null)
   let brunch = saveable("brunch", rsvp_info.brunch)
-  $: done_to_brunch = done_to_hike && (!invited_to_brunch || $brunch != null)
+  $: done_to_brunch = done_to_hike && (!noods || $brunch != null)
 
   // Submit //
   // ====== //
@@ -176,7 +176,7 @@
     {/if}
   </section>
 
-  {#if invited_to_brunch}
+  {#if noods}
     <section class:active={show_brunch}>
       <header><h2>4. Brunch</h2></header>
 
