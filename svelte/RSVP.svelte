@@ -26,7 +26,8 @@
       $cocktail != null || $cocktail_switch != null || $cocktail_number != null)
   let cocktail = saveable("cocktail", rsvp_info.cocktail)
   let cocktail_switch = saveable("cocktail_switch",
-      Number(rsvp_info.cocktail_excess > 0))
+      rsvp_info.cocktail_excess != null ?
+      Number(rsvp_info.cocktail_excess > 0) : null)
   let cocktail_number = saveable("cocktail_number", rsvp_info.cocktail_excess)
   $: cocktail_excess = !$cocktail_switch ? 0 : $cocktail_number
   $: done_to_cocktail = done_to_reception && (
@@ -45,11 +46,9 @@
 
   // Brunch //
   // ====== //
-  $: show_brunch = attend && (done_to_hike ||
-      $brunch != null)
+  $: show_brunch = attend && (done_to_hike || $brunch != null)
   let brunch = saveable("brunch", rsvp_info.brunch)
-  $: done_to_brunch = done_to_hike && (
-      !invited_to_brunch || $brunch != null)
+  $: done_to_brunch = done_to_hike && (!invited_to_brunch || $brunch != null)
 
   // Submit //
   // ====== //
@@ -178,29 +177,29 @@
   </section>
 
   {#if invited_to_brunch}
-  <section class:active={show_brunch}>
-    <header><h2>4. Brunch</h2></header>
+    <section class:active={show_brunch}>
+      <header><h2>4. Brunch</h2></header>
 
-    {#if show_brunch}
-      <div class="flex two detail">
-        <dl>
-          <dt>Time</dt>
-          <dd>Sunday, October 24<sup>th</sup> at 12:00 PM PDT</dd>
+      {#if show_brunch}
+        <div class="flex two detail">
+          <dl>
+            <dt>Time</dt>
+            <dd>Sunday, October 24<sup>th</sup> at 12:00 PM PDT</dd>
 
-          <dt>Location</dt>
-          <dd><a href="https://changan-artisan-noodle.business.site/" target=_blank>Chang'an Artisan Noodle</a></dd>
-        </dl>
+            <dt>Location</dt>
+            <dd><a href="https://changan-artisan-noodle.business.site/" target=_blank>Chang'an Artisan Noodle</a></dd>
+          </dl>
 
-        <Location id=ChIJ6X3Saaiwj4AR-ixm6fKP-rI />
-      </div>
+          <Location id=ChIJ6X3Saaiwj4AR-ixm6fKP-rI />
+        </div>
 
-      <fieldset>
-        <Toggle name={brunch.name} bind:result={$brunch}>
-          <p class="question">I will attend brunch</p>
-        </Toggle>
-      </fieldset>
-    {/if}
-  </section>
+        <fieldset>
+          <Toggle name={brunch.name} bind:result={$brunch}>
+            <p class="question">I will attend brunch</p>
+          </Toggle>
+        </fieldset>
+      {/if}
+    </section>
   {/if}
 
   <section class:active={show_submit}>
