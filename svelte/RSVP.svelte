@@ -88,20 +88,20 @@
     </div>
 
     <fieldset>
-      <Toggle name={reception.name} bind:result={$reception}>
+      <Toggle name="reception" bind:result={$reception}>
         <p class="question">I will attend the wedding ceremony and reception</p>
       </Toggle>
 
       {#if $reception}
         <p><textarea style="height: 7em;" placeholder="Please let us know if you have any allergies or dietary restrictions..." /></p>
 
-        <Toggle name={vaxxed.name} bind:result={$vaxxed}>
+        <Toggle name="vaxxed" bind:result={$vaxxed}>
           <p class="question">I am fully vaccinated for COVID-19</p>
         </Toggle>
 
         {#if $vaxxed == 0}
           The <a href="https://www.cdph.ca.gov/" target=_blank>California Department of Public Health</a> requires unvaccinated individuals to wear masks in indoor public settings. Masks may be removed when outside, or when eating or drinking. <a href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/COVID-19/guidance-for-face-coverings.aspx#asterisknew" target=_blank>More Information</a>
-          <Toggle name={masked.name} bind:result={$masked}>
+          <Toggle name="masked" bind:result={$masked}>
             <p class="question">I will wear a mask inside the museum, except when eating or drinking</p>
           </Toggle>
 
@@ -130,12 +130,12 @@
       </div>
 
       <fieldset>
-        <Toggle name={cocktail.name} bind:result={$cocktail}>
+        <Toggle name="cocktail" bind:result={$cocktail}>
           <p class="question">I will attend the cocktail reception</p>
         </Toggle>
 
         {#if $cocktail}
-          <Toggle name={cocktail_switch.name} bind:result={$cocktail_switch}>
+          <Toggle name="cocktail_switch" bind:result={$cocktail_switch}>
             <p class="question">Will you bring any guests other than {plusname}?</p>
           </Toggle>
           <input type=hidden name="cocktail_excess" value={cocktail_excess}>
@@ -143,7 +143,7 @@
           {#if $cocktail_switch}
             <div class="prompt">
               <p class="question">How many guests will you bring, excluding {plusname}?</p>
-              <select name={cocktail_number.name} bind:value={$cocktail_number} required>
+              <select name="cocktail_number" bind:value={$cocktail_number} required>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
                 <option value={3}>3</option>
@@ -162,14 +162,14 @@
       <p>If there's enough interest, we'll organize a group hike the morning of our wedding.</p>
 
       <fieldset>
-        <Toggle name={hike.name} bind:result={$hike}>
+        <Toggle name="hike" bind:result={$hike}>
           <p class="question">I'm interested in going on the group hike</p>
         </Toggle>
 
         {#if $hike}
           <div class="prompt">
             <p class="question">My mobile number</p>
-            <input type=tel name={mobile.name} bind:value={$mobile} placeholder="XXX-XXX-XXXX" required>
+            <input type=tel name="mobile" bind:value={$mobile} placeholder="XXX-XXX-XXXX" required>
           </div>
         {/if}
       </fieldset>
@@ -194,7 +194,7 @@
         </div>
 
         <fieldset>
-          <Toggle name={brunch.name} bind:result={$brunch}>
+          <Toggle name="brunch" bind:result={$brunch}>
             <p class="question">I will attend brunch</p>
           </Toggle>
         </fieldset>

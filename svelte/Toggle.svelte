@@ -1,7 +1,6 @@
 <script>
   export let name
-  export let result = JSON.parse(localStorage.getItem(name))
-  $: localStorage.setItem(name, JSON.stringify(result))
+  export let result
 </script>
 
 <div class="prompt">
