@@ -4,7 +4,8 @@ CREATE TABLE guest (
   name TEXT NOT NULL,
   plus_one_id INTEGER REFERENCES guest(id),
   email TEXT NOT NULL,
-  invited_to_brunch BOOLEAN NOT NULL
+  invited_to_brunch BOOLEAN NOT NULL,
+  secret_id UUID NOT NULL UNIQUE DEFAULT gen_random_uuid()
 );
 
 DROP TABLE IF EXISTS rsvp CASCADE;

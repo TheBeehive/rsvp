@@ -3,6 +3,7 @@ from sqlalchemy.orm import (
 from sqlalchemy import (
     create_engine, Column, Integer, String, Boolean, FetchedValue,
     ForeignKey)
+from sqlalchemy.dialects.postgresql import UUID
 
 __all__ = ("Session", "Guest", "RSVP")
 
@@ -20,6 +21,8 @@ class Guest(Base):
     plus_one_id = Column(Integer, ForeignKey('guest.id'))
     email = Column(String, nullable=False)
     invited_to_brunch = Column(Boolean, nullable=False)
+    secret_id = Column(UUID(as_uuid=True), nullable=False,
+            server_default=FetchedValue())
 
     plus_one = relationship('Guest', remote_side=[id])
     rsvps = relationship('RSVP', back_populates='guest')
