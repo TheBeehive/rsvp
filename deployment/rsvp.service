@@ -6,7 +6,7 @@ After=network.target
 User=rsvp
 Group=rsvp
 WorkingDirectory=/home/rsvp/rsvp
-ExecStart=/home/rsvp/rsvp/.local/bin/gunicorn -b unix:gunicorn.sock -m 0111 -w4 wsgi:app
+ExecStart=/home/rsvp/.local/bin/gunicorn -b unix:../gunicorn.sock -m 0111 -w4 rsvp:app
 
 [Install]
 WantedBy=multi-user.target
