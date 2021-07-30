@@ -196,6 +196,9 @@
       <header><h2>4. Brunch</h2></header>
 
       {#if show_brunch}
+        <p>Drop by and join Kaiting and Melanie for a few California IPAs and
+          spicy, numbing noodles at one of their favorite places in the South
+          Bay!</p>
         <div class="flex two detail">
           <dl>
             <dt>Time</dt>
@@ -208,9 +211,7 @@
             <dd>Casual</dd>
 
             <dt>Note</dt>
-            <dd style="padding-right: 0.4em;">
-              Drop by and join Kaiting and Melanie for a few California IPAs and
-              spicy, numbing noodles at one of their favorite places in the South Bay!</dd>
+            <dd>This will be an adults-only (21+) celebration.</dd>
           </dl>
 
           <Location id=ChIJ6X3Saaiwj4AR-ixm6fKP-rI />
