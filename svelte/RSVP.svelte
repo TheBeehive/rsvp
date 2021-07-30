@@ -60,13 +60,12 @@
   <header>
     <h1>RSVP Form for {name}</h1>
 
-    <p>Please complete this form and submit it by September 15<sup>th</sup>. If
-    you need to make any changes, this form can be resubmitted until that
-    date.</p>
+    <p>Please complete and submit by September 15<sup>th</sup>. This form will
+    remain open for resubmission until then.</p>
 
-    <p>Please review our
-      <a href="https://www.hackersgethitched.com/" target=_blank>wedding website</a>
-      for the latest information.</p>
+    <p>Details and updates on our
+      <a href="https://www.hackersgethitched.com/" target=_blank>wedding website</a>.
+    </p>
   </header>
 
   <section class="active">
@@ -80,8 +79,13 @@
         <dt>Location</dt>
         <dd><a href="https://computerhistory.org/" target=_blank>Computer History Museum</a></dd>
 
+        <dt>Dress</dt>
+        <dd><a
+          href="https://emilypost.com/advice/attire-guide-dress-codes-from-casual-to-white-tie">
+          Black-Tie Optional</a></dd>
+
         <dt>Note</dt>
-        <dd>The dress code is black tie optional. This will be an adults-only (21+) celebration.</dd>
+        <dd>This will be an adults-only (21+) celebration</dd>
       </dl>
 
       <Location id=ChIJm7NJkla3j4AR8vR-HWRxgOo />
@@ -100,13 +104,14 @@
         </Toggle>
 
         {#if $vaxxed == 0}
-          The <a href="https://www.cdph.ca.gov/" target=_blank>California Department of Public Health</a> requires unvaccinated individuals to wear masks in indoor public settings. Masks may be removed when outside, or when eating or drinking. <a href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/COVID-19/guidance-for-face-coverings.aspx#asterisknew" target=_blank>More Information</a>
+          <p>The <a href="https://www.cdph.ca.gov/" target=_blank>California Department of Public Health</a> requires unvaccinated individuals to wear a mask in public settings when indoors, except when eating or drinking. <a href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/COVID-19/guidance-for-face-coverings.aspx#asterisknew" target=_blank>More Information</a></p>
+
           <Toggle name="masked" bind:result={$masked}>
-            <p class="question">I will wear a mask inside the museum, except when eating or drinking</p>
+            <p class="question">I will comply with this state mandated requirement</p>
           </Toggle>
 
           {#if $masked == 0}
-            <p>We're sorry but you can't come</p>
+            <p>To ensure the health and safety of our guests and staff, we're unable to accomodate your attendance.</p>
           {/if}
         {/if}
       {/if}
@@ -124,6 +129,11 @@
 
           <dt>Location</dt>
           <dd><a href="https://vinolocale.org/" target=_blank>Vino Locale</a></dd>
+
+          <dt>Dress</dt>
+          <dd><a
+            href="https://emilypost.com/advice/attire-guide-dress-codes-from-casual-to-white-tie">
+            Dressy Casual</a></dd>
         </dl>
 
         <Location id=ChIJ2S5OXzi7j4ARGnV-XOyU-4g />
@@ -136,13 +146,13 @@
 
         {#if $cocktail}
           <Toggle name="cocktail_switch" bind:result={$cocktail_switch}>
-            <p class="question">Will you bring any guests other than {plusname}?</p>
+            <p class="question">Will you bring any guests apart from {plusname}?</p>
           </Toggle>
           <input type=hidden name="cocktail_excess" value={cocktail_excess}>
 
           {#if $cocktail_switch}
             <div class="prompt">
-              <p class="question">How many guests will you bring, excluding {plusname}?</p>
+              <p class="question">How many other guests will you bring?</p>
               <select name="cocktail_number" bind:value={$cocktail_number} required>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
@@ -159,16 +169,20 @@
     <header><h2>3. Wedding Day Hike</h2></header>
 
     {#if show_hike}
-      <p>If there's enough interest, we'll organize a group hike the morning of our wedding.</p>
+      <p>If there's enough interest, our wedding crew will lead a group hike
+      the morning of the wedding at a South Bay Open Space Preserve.</p>
 
       <fieldset>
         <Toggle name="hike" bind:result={$hike}>
-          <p class="question">I'm interested in going on the group hike</p>
+          <p class="question">I'm interested in the group hike</p>
         </Toggle>
 
         {#if $hike}
+          <p>We'll need your contact information to coordinate the hike. Please
+          provide your day-of mobile number.</p>
+
           <div class="prompt">
-            <p class="question">My mobile number</p>
+            <p class="question">My day-of mobile number</p>
             <input type=tel name="mobile" bind:value={$mobile} placeholder="XXX-XXX-XXXX" required>
           </div>
         {/if}
@@ -188,6 +202,14 @@
 
             <dt>Location</dt>
             <dd><a href="https://changan-artisan-noodle.business.site/" target=_blank>Chang'an Artisan Noodle</a></dd>
+
+            <dt>Dress</dt>
+            <dd>Casual</dd>
+
+            <dt>Note</dt>
+            <dd style="padding-right: 0.4em;">
+              Drop by and join Kaiting and Melanie for a few California IPAs and
+              spicy, numbing noodles at one of their favorite places in the South Bay!</dd>
           </dl>
 
           <Location id=ChIJ6X3Saaiwj4AR-ixm6fKP-rI />
@@ -195,7 +217,7 @@
 
         <fieldset>
           <Toggle name="brunch" bind:result={$brunch}>
-            <p class="question">I will attend brunch</p>
+            <p class="question">I will attend the brunch</p>
           </Toggle>
         </fieldset>
       {/if}
@@ -203,9 +225,12 @@
   {/if}
 
   <section class:active={show_submit}>
-    {#if show_submit}
-      <p style="text-align: right;"><input type=submit value="Submit"></p>
-    {/if}
+    <p class="action">
+      <a class="pseudo button help" href="mailto:ktchen14@gmail.com,melanieplageman@gmail.com?subject=Help with RSVP Form">Help</a>
+      {#if show_submit}
+        <input type=submit value="Submit">
+      {/if}
+    </p>
   </section>
 </form>
 </main>
@@ -259,6 +284,24 @@
   .question {
     margin-right: 1em;
     font-weight: bold;
+  }
+
+  .action {
+    display: flex;
+    align-content: flex-start;
+    align-items: baseline;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .help {
+    background-color: #ff851b;
+    color: #ffffff;
+  }
+
+  .help:hover {
+    box-shadow: inset 0 0 0 99em rgba(255, 255, 255, 0.2);
+    text-decoration: none;
   }
 
   input, select {
