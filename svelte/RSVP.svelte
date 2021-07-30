@@ -154,6 +154,7 @@
             <div class="prompt">
               <p class="question">How many other guests will you bring?</p>
               <select name="cocktail_number" bind:value={$cocktail_number} required>
+                <option hidden value></option>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
                 <option value={3}>3</option>
