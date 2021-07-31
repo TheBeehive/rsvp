@@ -5,7 +5,7 @@ CREATE TABLE guest (
   nickname TEXT NOT NULL,
   plus_one_id INTEGER REFERENCES guest(id),
   email TEXT NOT NULL,
-  invited_to_brunch BOOLEAN NOT NULL,
+  invited_to_brunch BOOLEAN NOT NULL DEFAULT FALSE,
   secret_id UUID NOT NULL UNIQUE DEFAULT gen_random_uuid()
 );
 
@@ -38,20 +38,20 @@ CREATE TABLE rsvp (
 );
 
 -- TODO: interpolate guest name
-CREATE OR REPLACE FUNCTION check_brunch_invitation() RETURNS TRIGGER AS $$
-BEGIN
-  IF
-    NEW.brunch IS NOT NULL AND
-    (SELECT invited_to_brunch FROM guest WHERE id = NEW.guest_id) IS FALSE
-  THEN
-    RAISE EXCEPTION 'Guest is not invited to brunch and thus cannot RSVP';
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-DROP TRIGGER IF EXISTS brunch_validation ON rsvp;
-CREATE TRIGGER brunch_validation
-  BEFORE INSERT ON rsvp
-  FOR EACH ROW
-  EXECUTE FUNCTION check_brunch_invitation();
+-- CREATE OR REPLACE FUNCTION check_brunch_invitation() RETURNS TRIGGER AS $$
+-- BEGIN
+--   IF
+--     NEW.brunch IS NOT NULL AND
+--     (SELECT invited_to_brunch FROM guest WHERE id = NEW.guest_id) IS FALSE
+--   THEN
+--     RAISE EXCEPTION 'Guest is not invited to brunch and thus cannot RSVP';
+--   END IF;
+--   RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
+-- 
+-- DROP TRIGGER IF EXISTS brunch_validation ON rsvp;
+-- CREATE TRIGGER brunch_validation
+--   BEFORE INSERT ON rsvp
+--   FOR EACH ROW
+--   EXECUTE FUNCTION check_brunch_invitation();

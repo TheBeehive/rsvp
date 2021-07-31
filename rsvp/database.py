@@ -25,7 +25,7 @@ class Guest(Base):
     secret_id = Column(UUID(as_uuid=True), nullable=False,
             server_default=FetchedValue())
 
-    plus_one = relationship('Guest', remote_side=[id])
+    plus_one = relationship('Guest', remote_side=[id], post_update=True)
     rsvps = relationship('RSVP', back_populates='guest')
 
     query = Session.query_property()

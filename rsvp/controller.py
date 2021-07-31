@@ -86,3 +86,27 @@ def post_rsvp(secret_id):
         rsvp_info.update(schema.dump(rsvp))
 
     return render_template("index.html", rsvp_info=rsvp_info)
+
+# generate all the files we will use to send the emails to guests
+def invite_guest(id):
+    guest = Guest.get(id)
+    fname = guest.name.split(' ')[0]
+    url = f'hackersgethitched.com/{guest.secret_id}'
+    email_text = f"""
+    {fname},
+
+    You're invited to join us at our wedding on October 23rd, 2021 at the Computer
+    History Museum in Mountain View, CA.
+
+    As a reminder, the most up to date information on the event is available on our
+    wedding website, https://hackersgethitched.com.
+
+    Please RSVP by September 15th, 2021 using this RSVP form: {url}
+
+    Note that only submissions using that form will be recorded in our wedding
+    attendance database.
+    """
+
+    print(email_text)
+    with open('myspecialdir/' + guest.email) as f:
+        f.write(email_text)
