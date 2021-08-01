@@ -17,7 +17,8 @@ class Guest(Base):
     __tablename__ = 'guest'
 
     id = Column(Integer, primary_key=True, server_default=FetchedValue())
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
+    nickname = Column(String, nullable=False)
     plus_one_id = Column(Integer, ForeignKey('guest.id'))
     email = Column(String, nullable=False)
     invited_to_brunch = Column(Boolean, nullable=False)
