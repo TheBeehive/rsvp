@@ -6,7 +6,6 @@
   export let rsvp_info = {}
 
   let name = rsvp_info.name
-  let plusname = rsvp_info.plusname
   let noods = rsvp_info.noods
 
   // Ceremony and Reception //
@@ -14,42 +13,67 @@
   let reception = saveable("reception", rsvp_info.reception)
   let vaxxed = saveable("vaxxed", rsvp_info.vaxxed)
   let masked = saveable("masked", rsvp_info.masked)
-  $: attend = $reception && ($vaxxed || !$vaxxed && $masked)
 
-  $: done_to_reception =
+  let plus_switch = saveable("plus_switch", rsvp_info.plusname != null ?
+    (rsvp_info.plusname ? 1 : 0) : null)
+  let plusname = saveable("plusname", rsvp_info.plusname)
+  let plusvaxxed = saveable("plusvaxxed", rsvp_info.plusvaxxed)
+  let plusmasked = saveable("plusmasked", rsvp_info.plusmasked)
+
+  $: attend = $reception && ($vaxxed || !$vaxxed && $masked)
+  $: plusattend = $plus_switch == 1 &&
+      $plusname && ($plusvaxxed || !$plusvaxxed && $plusmasked)
+  $: attend_continue = attend && ($plus_switch == 0 || plusattend)
+
+
+  $: done_to_reception = (
       $reception == 1 && $vaxxed == 1 ||
       $reception == 1 && $vaxxed == 0 && $masked != null ||
       $reception == 0
+  ) && (!attend || (
+      $plus_switch == 1 && $plusname && $plusvaxxed == 1 ||
+      $plus_switch == 1 && $plusname && $plusvaxxed == 0 && $plusmasked != null ||
+      $plus_switch == 0
+  ))
 
   // Cocktail Reception //
   // ================== //
-  $: show_cocktail = attend && (done_to_reception ||
-      $cocktail != null || $cocktail_switch != null || $cocktail_number != null)
+  $: show_cocktail = attend_continue && (done_to_reception ||
+    $cocktail != null || $pluscocktail != null || $cocktail_switch != null || $cocktail_number != null)
   let cocktail = saveable("cocktail", rsvp_info.cocktail)
+  let pluscocktail = saveable("pluscocktail", rsvp_info.pluscocktail)
   let cocktail_switch = saveable("cocktail_switch",
       rsvp_info.cocktail_excess != null ?
       Number(rsvp_info.cocktail_excess > 0) : null)
   let cocktail_number = saveable("cocktail_number", rsvp_info.cocktail_excess)
   $: cocktail_excess = !$cocktail_switch ? 0 : $cocktail_number
   $: done_to_cocktail = done_to_reception && (
-      $cocktail == 1 && $cocktail_switch == 0 ||
-      $cocktail == 1 && $cocktail_switch == 1 && $cocktail_number != null ||
+      $cocktail == 1 && (!$plus_switch || $pluscocktail != null) &&
+        $cocktail_switch == 0 ||
+      $cocktail == 1 && (!$plus_switch || $pluscocktail != null) &&
+        $cocktail_switch == 1 && $cocktail_number != null ||
       $cocktail == 0)
 
   // Hike //
   // ==== //
-  $: show_hike = attend && (done_to_cocktail ||
-      $hike != null || $mobile != null)
+  $: show_hike = attend_continue && (done_to_cocktail ||
+      $hike != null || $mobile != null || $plushike != null || $plusmobile != null)
   let hike = saveable("hike", rsvp_info.hike)
   let mobile = saveable("mobile", rsvp_info.mobile)
+  let plushike = saveable("plushike", rsvp_info.plushike)
+  let plusmobile = saveable("plusmobile", rsvp_info.plusmobile)
   $: done_to_hike = done_to_cocktail && (
-      $hike == 1 && $mobile || $hike == 0)
+    $hike == 1 && $mobile && (!$plus_switch || $plushike == 1 && $plusmobile) ||
+    $hike == 1 && $mobile && (!$plus_switch || $plushike == 0) ||
+    $hike == 0)
 
   // Brunch //
   // ====== //
-  $: show_brunch = attend && (done_to_hike || $brunch != null)
+  $: show_brunch = attend_continue && (done_to_hike || $brunch != null)
   let brunch = saveable("brunch", rsvp_info.brunch)
-  $: done_to_brunch = done_to_hike && (!noods || $brunch != null)
+  let plusbrunch = saveable("plusbrunch", rsvp_info.plusbrunch)
+  $: done_to_brunch = done_to_hike && (!noods ||
+    $brunch != null && (!$plus_switch || $plusbrunch != null))
 
   // Submit //
   // ====== //
@@ -116,6 +140,40 @@
           {/if}
         {/if}
       {/if}
+
+      {#if attend}
+        <Toggle name="plus_switch" bind:result={$plus_switch}>
+          <p class="question">I'm bringing a plus one</p>
+        </Toggle>
+
+        {#if $plus_switch}
+          <div class="prompt">
+            <p class="question">Who's your plus one?</p>
+            <input type=text name="plusname" bind:value={$plusname} placeholder="Full Name" required>
+          </div>
+
+          {#if $plusname}
+            <Toggle name="plusname" bind:result={$plusvaxxed}>
+              <p class="question">{$plusname} is fully vaccinated for COVID-19</p>
+            </Toggle>
+
+            {#if $plusvaxxed == 0}
+              <!-- Skip this informational section if it's redundant -->
+              {#if $vaxxed != 0}
+                <p>The <a href="https://www.cdph.ca.gov/" target=_blank>California Department of Public Health</a> requires unvaccinated individuals to wear a mask in public settings when indoors, except when eating or drinking. <a href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/COVID-19/guidance-for-face-coverings.aspx#asterisknew" target=_blank>More Information</a></p>
+              {/if}
+
+              <Toggle name="plusmasked" bind:result={$plusmasked}>
+                <p class="question">{$plusname} will comply with the state mandated mask requirement</p>
+              </Toggle>
+
+              {#if $plusmasked == 0}
+                <p>To ensure the health and safety of our guests and staff, we're unable to accomodate {$plusname}'s attendance.</p>
+              {/if}
+            {/if}
+          {/if}
+        {/if}
+      {/if}
     </fieldset>
   </section>
 
@@ -146,14 +204,30 @@
         </Toggle>
 
         {#if $cocktail}
-          <Toggle name="cocktail_switch" bind:result={$cocktail_switch}>
-            <p class="question">Will you bring any guests apart from {plusname}?</p>
-          </Toggle>
+          {#if plusattend}
+            <Toggle name="pluscocktail" bind:result={$pluscocktail}>
+              <p class="question">Will you bring {$plusname}?</p>
+            </Toggle>
+          {/if}
+
+          {#if plusattend && $pluscocktail != null || !plusattend}
+            <Toggle name="cocktail_switch" bind:result={$cocktail_switch}>
+              <p class="question">
+                {#if plusattend && $pluscocktail}
+                  Will you bring any guests apart from {$plusname}?
+                {:else}
+                  Will you bring any guests?
+                {/if}
+              </p>
+            </Toggle>
+          {/if}
           <input type=hidden name="cocktail_excess" value={cocktail_excess}>
 
           {#if $cocktail_switch}
             <div class="prompt">
-              <p class="question">How many other guests will you bring?</p>
+              <p class="question">
+                How many {#if plusattend && $pluscocktail} other {/if} guests will you bring?
+              </p>
               <select name="cocktail_number" bind:value={$cocktail_number} required>
                 <option hidden value></option>
                 <option value={1}>1</option>
@@ -180,6 +254,12 @@
         </Toggle>
 
         {#if $hike}
+          {#if plusattend}
+            <Toggle name="plushike" bind:result={$plushike}>
+              <p class="question">{$plusname} is interested in the group hike</p>
+            </Toggle>
+          {/if}
+
           <p>We'll need your contact information to coordinate the hike. Please
           provide your day-of mobile number.</p>
 
@@ -187,23 +267,30 @@
             <p class="question">My day-of mobile number</p>
             <input type=tel name="mobile" bind:value={$mobile} placeholder="XXX-XXX-XXXX" required>
           </div>
+
+          {#if plusattend && $plushike}
+            <div class="prompt">
+              <p class="question">{$plusname}'s day-of mobile number</p>
+              <input type=tel name="plusmobile" bind:value={$plusmobile} placeholder="XXX-XXX-XXXX" required>
+            </div>
+          {/if}
         {/if}
       </fieldset>
     {/if}
   </section>
 
   {#if noods}
-    <section class:active={show_brunch}>
-      <header><h2>4. Brunch</h2></header>
+  <section class:active={show_brunch}>
+    <header><h2>4. Brunch</h2></header>
 
-      {#if show_brunch}
+    {#if show_brunch}
         <p>Drop by and join Kaiting and Melanie for a few California IPAs and
           spicy, numbing noodles at one of their favorite places in the South
           Bay!</p>
-        <div class="flex two detail">
-          <dl>
-            <dt>Time</dt>
-            <dd>Sunday, October 24<sup>th</sup> at 12:00 PM PDT</dd>
+      <div class="flex two detail">
+        <dl>
+          <dt>Time</dt>
+          <dd>Sunday, October 24<sup>th</sup> at 12:00 PM PDT</dd>
 
             <dt>Location</dt>
             <dd><a href="https://changan-artisan-noodle.business.site/" target=_blank>Chang'an Artisan Noodle</a></dd>
@@ -213,26 +300,31 @@
 
             <dt>Note</dt>
             <dd>This will be an adults-only (21+) celebration.</dd>
-          </dl>
+        </dl>
 
-          <Location id=ChIJ6X3Saaiwj4AR-ixm6fKP-rI />
-        </div>
+        <Location id=ChIJ6X3Saaiwj4AR-ixm6fKP-rI />
+      </div>
 
-        <fieldset>
-          <Toggle name="brunch" bind:result={$brunch}>
-            <p class="question">I will attend the brunch</p>
+      <fieldset>
+        <Toggle name="brunch" bind:result={$brunch}>
+          <p class="question">I will attend the brunch</p>
+        </Toggle>
+        {#if $brunch && plusattend}
+          <Toggle name="plusbrunch" bind:result={$plusbrunch}>
+            <p class="question">{$plusname} will attend the brunch</p>
           </Toggle>
-        </fieldset>
-      {/if}
-    </section>
+        {/if}
+      </fieldset>
+    {/if}
+  </section>
   {/if}
 
   <section class:active={show_submit}>
     <p class="action">
       <a class="pseudo button help" href="mailto:ktchen14@gmail.com,melanieplageman@gmail.com?subject=Help with RSVP Form">Help</a>
-      {#if show_submit}
+    {#if show_submit}
         <input type=submit value="Submit">
-      {/if}
+    {/if}
     </p>
   </section>
 </form>
