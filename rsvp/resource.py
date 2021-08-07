@@ -34,3 +34,13 @@ class RSVPSchema(Schema):
     phone = String(data_key='mobile', missing=None)
 
     brunch = NumberBool(missing=None)
+
+
+class IndeterminateRSVPSchema(RSVPSchema):
+    plusname = String(missing=None)
+    plusvaxxed = NumberBool(missing=None)
+    plusmasked = NumberBool(missing=None)
+    pluscocktails = NumberBool(data_key='pluscocktail', missing=None)
+    plushike = NumberBool(missing=None)
+    plusphone = String(data_key='plusmobile', missing=None)
+    plusbrunch = NumberBool(missing=None)

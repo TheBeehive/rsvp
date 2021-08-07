@@ -1,7 +1,7 @@
 from flask import Flask, request, make_response, abort, render_template
 from marshmallow import EXCLUDE
 from rsvp.database import Session, Guest, RSVP
-from rsvp.resource import RSVPSchema
+from rsvp.resource import RSVPSchema, IndeterminateRSVPSchema
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.exc import NoResultFound
 import os
@@ -31,22 +31,34 @@ def get_rsvp(secret_id):
     rsvp_info = {
         'secret_id': guest.secret_id,
         'name': guest.name,
-        'plusname': guest.plus_one.name if guest.plus_one else None,
         'email': guest.email,
         'noods': guest.invited_to_brunch,
     }
+
+    if guest.plus_one_id is not None:
+        rsvp_info['type'] = 'rsvp'
+        rsvp_info['plusname'] = guest.plus_one.name
+        schema = RSVPSchema()
+    else:
+        rsvp_info['type'] = 'indeterminate_rsvp'
+        schema = IndeterminateRSVPSchema()
+
     if rsvp is not None:
-        rsvp_info.update(RSVPSchema().dump(rsvp))
+        rsvp_info.update(schema.dump(rsvp))
 
     return render_template("index.html", rsvp_info=rsvp_info)
 
 @app.route('/rsvp/<uuid:secret_id>', methods=['POST'])
 def post_rsvp(secret_id):
-    schema = RSVPSchema(unknown=EXCLUDE)
-
     guest = Guest.query.filter_by(secret_id=secret_id) \
             .with_for_update(read=False, key_share=True) \
             .one()
+
+    if guest.plus_one_id is not None:
+        schema = RSVPSchema(unknown=EXCLUDE)
+    else:
+        schema = IndeterminateRSVPSchema(unknown=EXCLUDE)
+
     rsvp = RSVP(guest=guest, **schema.load(request.form))
     Session.add(rsvp)
 
@@ -55,10 +67,17 @@ def post_rsvp(secret_id):
     rsvp_info = {
         'secret_id': guest.secret_id,
         'name': guest.name,
-        'plusname': guest.plus_one.name if guest.plus_one else None,
         'email': guest.email,
         'noods': guest.invited_to_brunch,
     }
-    rsvp_info.update(schema.dump(rsvp))
+
+    if guest.plus_one_id is not None:
+        rsvp_info['type'] = 'rsvp'
+        rsvp_info['plusname'] = guest.plus_one.name
+    else:
+        rsvp_info['type'] = 'indeterminate_rsvp'
+
+    if rsvp is not None:
+        rsvp_info.update(schema.dump(rsvp))
 
     return render_template("index.html", rsvp_info=rsvp_info)

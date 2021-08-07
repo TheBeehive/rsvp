@@ -38,15 +38,27 @@ class RSVP(Base):
 
     id = Column(Integer, primary_key=True, server_default=FetchedValue())
     guest_id = Column(Integer, ForeignKey('guest.id'))
-    brunch = Column(Boolean)
+
     wedding = Column(Boolean, nullable=False)
     vaxxed = Column(Boolean)
     masked = Column(Boolean)
-    hike = Column(Boolean, nullable=False)
-    phone = Column(String)
-    cocktails = Column(Boolean, nullable=False)
+    plusname = Column(String)
+    plusvaxxed = Column(Boolean)
+    plusmasked = Column(Boolean)
+
+    cocktails = Column(Boolean)
     cocktails_excess = Column(Integer)
-    submitted_at = Column(Integer, server_default=FetchedValue())
+    pluscocktails = Column(Boolean)
+
+    hike = Column(Boolean)
+    phone = Column(String)
+    plushike = Column(Boolean)
+    plusphone = Column(String)
+
+    brunch = Column(Boolean)
+    plusbrunch = Column(Boolean)
+
+    submitted_at = Column(Integer, nullable=False, server_default=FetchedValue())
 
     guest = relationship(Guest, back_populates='rsvps')
 
