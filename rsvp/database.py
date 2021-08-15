@@ -40,6 +40,7 @@ class RSVP(Base):
     guest_id = Column(Integer, ForeignKey('guest.id'))
 
     wedding = Column(Boolean, nullable=False)
+    diet_info = Column(String)
     vaxxed = Column(Boolean)
     masked = Column(Boolean)
     plusname = Column(String)

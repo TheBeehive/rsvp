@@ -15,6 +15,7 @@ CREATE TABLE rsvp (
   guest_id INTEGER NOT NULL REFERENCES guest(id),
 
   wedding BOOLEAN NOT NULL,
+  diet_info TEXT,
   vaxxed BOOLEAN,
   masked BOOLEAN,
   plusname TEXT CHECK (plusname != ''),

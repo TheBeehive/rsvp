@@ -24,13 +24,14 @@ class NumberBool(Field):
 
 class RSVPSchema(Schema):
     wedding = NumberBool(data_key='reception')
+    diet_info = String(missing=None)
     vaxxed = NumberBool(missing=None)
     masked = NumberBool(missing=None)
 
-    cocktails = NumberBool(data_key='cocktail')
+    cocktails = NumberBool(data_key='cocktail', missing=None)
     cocktails_excess = Integer(data_key='cocktail_excess', missing=None)
 
-    hike = NumberBool()
+    hike = NumberBool(missing=None)
     phone = String(data_key='mobile', missing=None)
 
     brunch = NumberBool(missing=None)
