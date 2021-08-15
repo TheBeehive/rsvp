@@ -9,6 +9,10 @@ import os
 root = os.path.realpath(os.path.join(__file__, '..', '..'))
 app = Flask(__name__, static_url_path='/', root_path=root)
 
+@app.teardown_appcontext
+def remove_session(exception=None):
+    Session.remove()
+
 @app.errorhandler(404)
 def handle_404(e):
     return app.send_static_file('404.html'), 404
