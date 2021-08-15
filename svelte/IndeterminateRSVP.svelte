@@ -24,8 +24,10 @@
   let vaxxed = saveable("vaxxed", rsvp_info.vaxxed)
   let masked = saveable("masked", rsvp_info.masked)
 
-  let plus_switch = saveable("plus_switch", rsvp_info.plusname ? 1 : 0)
+  let plus_switch = saveable("plus_switch",
+    rsvp_info.plusname == null ? null : (rsvp_info.plusname ? 1 : 0))
   let plusname = saveable("plusname", rsvp_info.plusname)
+  $: plusname_server = $plus_switch && $plusname ? $plusname : ''
   let plusvaxxed = saveable("plusvaxxed", rsvp_info.plusvaxxed)
   let plusmasked = saveable("plusmasked", rsvp_info.plusmasked)
 
@@ -183,11 +185,12 @@
         <Toggle name="plus_switch" bind:result={$plus_switch}>
           <p class="question">I'm bringing a plus one</p>
         </Toggle>
+        <input type=hidden name="plusname" value={plusname_server}>
 
         {#if $plus_switch}
           <div class="prompt">
             <p class="question">Who's your plus one?</p>
-            <input type=text name="plusname" bind:value={$plusname} placeholder="Full Name" required>
+            <input type=text bind:value={$plusname} placeholder="Full Name" required>
           </div>
 
           {#if $plusname}

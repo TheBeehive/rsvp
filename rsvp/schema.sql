@@ -18,7 +18,7 @@ CREATE TABLE rsvp (
   diet_info TEXT,
   vaxxed BOOLEAN,
   masked BOOLEAN,
-  plusname TEXT CHECK (plusname != ''),
+  plusname TEXT,
   plusvaxxed BOOLEAN,
   plusmasked BOOLEAN,
 
