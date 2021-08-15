@@ -442,6 +442,6 @@
   }
 
   select {
-    padding-right: 1.2em;
+    padding-right: 1.8em;
   }
 </style>
