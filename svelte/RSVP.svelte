@@ -14,12 +14,17 @@
   let reception = saveable("reception", rsvp_info.reception)
   let vaxxed = saveable("vaxxed", rsvp_info.vaxxed)
   let masked = saveable("masked", rsvp_info.masked)
-  $: attend = $reception && ($vaxxed || !$vaxxed && $masked)
+  $: attend = $reception && $masked
+  /* $: attend = $reception && ($vaxxed || !$vaxxed && $masked) */
 
   $: done_to_reception =
-      $reception == 1 && $vaxxed == 1 ||
-      $reception == 1 && $vaxxed == 0 && $masked != null ||
+      $reception == 1 && $vaxxed != null && $masked == 1 ||
       $reception == 0
+
+  /* $: done_to_reception = */
+  /*     $reception == 1 && $vaxxed == 1 || */
+  /*     $reception == 1 && $vaxxed == 0 && $masked != null || */
+  /*     $reception == 0 */
 
   // Cocktail Reception //
   // ================== //
@@ -94,7 +99,7 @@
 
     <fieldset>
       <Toggle name="reception" bind:result={$reception}>
-        <p class="question">I will attend the wedding ceremony and reception</p>
+        <p class="question">I'd like to attend the wedding ceremony and reception</p>
       </Toggle>
 
       {#if $reception}
@@ -105,15 +110,20 @@
         </Toggle>
 
         {#if $vaxxed == 0}
-          <p>The <a href="https://www.cdph.ca.gov/" target=_blank>California Department of Public Health</a> requires unvaccinated individuals to wear a mask in public settings when indoors, except when eating or drinking. <a href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/COVID-19/guidance-for-face-coverings.aspx#asterisknew" target=_blank>More Information</a></p>
+          <p>We have registered your interest in attending the event. However, your RSVP is <strong>provisional</strong> at this time.</p>
+          <p>Due to the evolving nature of the COVID-19 pandemic and the associated changes to local and state regulations as well as the requirements of our venue, we <strong>cannot</strong> guarantee that we will be able to accommodate unvaccinated guests at our wedding.</p>
+          <p>If the requirements for attendance change between now and October 23<sup>rd</sup> such that we are unable to accommodate unvaccinated guests, we will notify you via email. Should your vaccination status change between now and then, please update and resubmit this form.</p>
+          <hr>
+        {/if}
 
-          <Toggle name="masked" bind:result={$masked}>
-            <p class="question">I will comply with this state mandated requirement</p>
-          </Toggle>
+        <p>At the moment, Santa Clara County requires all individuals, regardless of vaccination status, to <a href="https://covid19.sccgov.org/order-health-officer-08-02-2021-requiring-all-to-use-face-covering-indoors" target=_blank>wear a mask</a> when indoors, except when eating or drinking.</p>
 
-          {#if $masked == 0}
-            <p>To ensure the health and safety of our guests and staff, we're unable to accomodate your attendance.</p>
-          {/if}
+        <Toggle name="masked" bind:result={$masked}>
+          <p class="question">I will comply with any mask requirement in effect at the event</p>
+        </Toggle>
+
+        {#if $masked == 0}
+          <p>To ensure the health and safety of our guests and staff, we're unable to accomodate your attendance.</p>
         {/if}
       {/if}
     </fieldset>
