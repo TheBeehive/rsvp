@@ -155,7 +155,7 @@
       </Toggle>
 
       {#if $reception}
-        <p><textarea bind:value={$diet_info} style="height: 7em;" placeholder="Please let us know if you have any allergies or dietary restrictions..." /></p>
+        <p><textarea name="diet_info" bind:value={$diet_info} style="height: 7em;" placeholder="Please let us know if you have any allergies or dietary restrictions..." /></p>
 
         <Toggle name="vaxxed" bind:result={$vaxxed}>
           <p class="question">I am fully vaccinated for COVID-19</p>
