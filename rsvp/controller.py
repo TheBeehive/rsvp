@@ -51,8 +51,9 @@ def get_rsvp(secret_id):
 @app.route('/rsvp/<uuid:secret_id>', methods=['POST'])
 def post_rsvp(secret_id):
     guest = Guest.query.filter_by(secret_id=secret_id) \
-            .with_for_update(read=False, key_share=True) \
             .one()
+
+    # .with_for_update(read=False, key_share=True) \
 
     if guest.plus_one_id is not None:
         schema = RSVPSchema(unknown=EXCLUDE)
