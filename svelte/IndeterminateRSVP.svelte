@@ -24,8 +24,7 @@
   let vaxxed = saveable("vaxxed", rsvp_info.vaxxed)
   let masked = saveable("masked", rsvp_info.masked)
 
-  let plus_switch = saveable("plus_switch", rsvp_info.plusname != null ?
-    (rsvp_info.plusname ? 1 : 0) : null)
+  let plus_switch = saveable("plus_switch", rsvp_info.plusname ? 1 : 0)
   let plusname = saveable("plusname", rsvp_info.plusname)
   let plusvaxxed = saveable("plusvaxxed", rsvp_info.plusvaxxed)
   let plusmasked = saveable("plusmasked", rsvp_info.plusmasked)
