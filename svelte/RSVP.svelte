@@ -68,7 +68,9 @@
 
   // Submit //
   // ====== //
-  $: show_submit = done_to_reception
+  $: show_submit =
+      $reception == 1 && $vaxxed != null && $masked != null ||
+      $reception == 0
 </script>
 
 <main>

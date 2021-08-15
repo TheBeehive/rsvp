@@ -97,7 +97,13 @@
 
   // Submit //
   // ====== //
-  $: show_submit = done_to_reception
+  $: show_submit = (
+      $reception == 1 && $vaxxed != null && $masked != null ||
+      $reception == 0
+  ) && (!attend || (
+      $plus_switch == 1 && $plusname && $plusvaxxed != null && $plusmasked != null ||
+      $plus_switch == 0
+  ))
 </script>
 
 <main>
