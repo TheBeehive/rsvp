@@ -147,7 +147,7 @@
             href="https://emilypost.com/advice/attire-guide-dress-codes-from-casual-to-white-tie" target=_blank>Semi-Formal</a></dd>
         </dl>
 
-        <Location id=ChIJ2S5OXzi7j4ARGnV-XOyU-4g />
+        <Location id=ChIJiUNAfPukj4ARkQSP3H1etD4 />
       </div>
 
       <fieldset>
