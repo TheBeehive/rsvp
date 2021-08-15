@@ -185,7 +185,7 @@
           </div>
 
           {#if $plusname}
-            <Toggle name="plusname" bind:result={$plusvaxxed}>
+            <Toggle name="plusvaxxed" bind:result={$plusvaxxed}>
               <p class="question">{$plusname} is fully vaccinated for COVID-19</p>
             </Toggle>
 
