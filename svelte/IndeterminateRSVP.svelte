@@ -20,21 +20,32 @@
   let plusvaxxed = saveable("plusvaxxed", rsvp_info.plusvaxxed)
   let plusmasked = saveable("plusmasked", rsvp_info.plusmasked)
 
-  $: attend = $reception && ($vaxxed || !$vaxxed && $masked)
-  $: plusattend = $plus_switch == 1 &&
-      $plusname && ($plusvaxxed || !$plusvaxxed && $plusmasked)
+  $: attend = $reception && $masked
+  /* $: attend = $reception && ($vaxxed || !$vaxxed && $masked) */
+
+  $: plusattend = $plus_switch == 1 && $plusname && $plusmasked
+  /* $: plusattend = $plus_switch == 1 && */
+  /*     $plusname && ($plusvaxxed || !$plusvaxxed && $plusmasked) */
+
   $: attend_continue = attend && ($plus_switch == 0 || plusattend)
 
-
   $: done_to_reception = (
-      $reception == 1 && $vaxxed == 1 ||
-      $reception == 1 && $vaxxed == 0 && $masked != null ||
+      $reception == 1 && $vaxxed != null && $masked == 1 ||
       $reception == 0
   ) && (!attend || (
-      $plus_switch == 1 && $plusname && $plusvaxxed == 1 ||
-      $plus_switch == 1 && $plusname && $plusvaxxed == 0 && $plusmasked != null ||
+      $plus_switch == 1 && $plusname && $plusvaxxed != null && $plusmasked == 1 ||
       $plus_switch == 0
   ))
+
+  /* $: done_to_reception = ( */
+  /*     $reception == 1 && $vaxxed == 1 || */
+  /*     $reception == 1 && $vaxxed == 0 && $masked != null || */
+  /*     $reception == 0 */
+  /* ) && (!attend || ( */
+  /*     $plus_switch == 1 && $plusname && $plusvaxxed == 1 || */
+  /*     $plus_switch == 1 && $plusname && $plusvaxxed == 0 && $plusmasked != null || */
+  /*     $plus_switch == 0 */
+  /* )) */
 
   // Cocktail Reception //
   // ================== //
@@ -129,15 +140,20 @@
         </Toggle>
 
         {#if $vaxxed == 0}
-          <p>The <a href="https://www.cdph.ca.gov/" target=_blank>California Department of Public Health</a> requires unvaccinated individuals to wear a mask in public settings when indoors, except when eating or drinking. <a href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/COVID-19/guidance-for-face-coverings.aspx#asterisknew" target=_blank>More Information</a></p>
+          <p>We have registered your interest in attending the event. However, your RSVP is <strong>provisional</strong> at this time.</p>
+          <p>Due to the evolving nature of the COVID-19 pandemic and the associated changes to local and state regulations as well as the requirements of our venue, we <strong>cannot</strong> guarantee that we will be able to accommodate unvaccinated guests at our wedding.</p>
+          <p>If the requirements for attendance change between now and October 23<sup>rd</sup> such that we are unable to accommodate unvaccinated guests, we will notify you via email. Should your vaccination status change between now and then, please update and resubmit this form.</p>
+          <hr>
+        {/if}
 
-          <Toggle name="masked" bind:result={$masked}>
-            <p class="question">I will comply with this state mandated requirement</p>
-          </Toggle>
+        <p>At the moment, Santa Clara County requires all individuals, regardless of vaccination status, to <a href="https://covid19.sccgov.org/order-health-officer-08-02-2021-requiring-all-to-use-face-covering-indoors" target=_blank>wear a mask</a> when indoors, except when eating or drinking.</p>
 
-          {#if $masked == 0}
-            <p>To ensure the health and safety of our guests and staff, we're unable to accomodate your attendance.</p>
-          {/if}
+        <Toggle name="masked" bind:result={$masked}>
+          <p class="question">I will comply with any mask requirement in effect at the event</p>
+        </Toggle>
+
+        {#if $masked == 0}
+          <p>To ensure the health and safety of our guests and staff, we're unable to accomodate your attendance.</p>
         {/if}
       {/if}
 
@@ -158,18 +174,19 @@
             </Toggle>
 
             {#if $plusvaxxed == 0}
-              <!-- Skip this informational section if it's redundant -->
-              {#if $vaxxed != 0}
-                <p>The <a href="https://www.cdph.ca.gov/" target=_blank>California Department of Public Health</a> requires unvaccinated individuals to wear a mask in public settings when indoors, except when eating or drinking. <a href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/COVID-19/guidance-for-face-coverings.aspx#asterisknew" target=_blank>More Information</a></p>
+              <p>We have registered your interest in bringing {$plusname} to the event. However, your plus one's RSVP is <strong>provisional</strong> at this time.</p>
+              {#if $vaxxed == 1}
+                <p>Due to the evolving nature of the COVID-19 pandemic and the associated changes to local and state regulations as well as the requirements of our venue, we <strong>cannot</strong> guarantee that we will be able to accommodate unvaccinated guests at our wedding.</p>
+                <p>If the requirements for attendance change between now and October 23<sup>rd</sup> such that we are unable to accommodate unvaccinated guests, we will notify you via email. Should their vaccination status change between now and then, please update and resubmit this form.</p>
               {/if}
+            {/if}
 
-              <Toggle name="plusmasked" bind:result={$plusmasked}>
-                <p class="question">{$plusname} will comply with the state mandated mask requirement</p>
-              </Toggle>
+            <Toggle name="plusmasked" bind:result={$plusmasked}>
+              <p class="question">{$plusname} will comply with any mask requirement in effect at the event</p>
+            </Toggle>
 
-              {#if $plusmasked == 0}
-                <p>To ensure the health and safety of our guests and staff, we're unable to accomodate {$plusname}'s attendance.</p>
-              {/if}
+            {#if $plusmasked == 0}
+              <p>To ensure the health and safety of our guests and staff, we're unable to accomodate {$plusname}'s attendance.</p>
             {/if}
           {/if}
         {/if}
