@@ -87,7 +87,7 @@
 
         <dt>Dress</dt>
         <dd><a
-          href="https://emilypost.com/advice/attire-guide-dress-codes-from-casual-to-white-tie">
+          href="https://emilypost.com/advice/attire-guide-dress-codes-from-casual-to-white-tie" target=_blank>
           Black-Tie Optional</a></dd>
 
         <dt>Note</dt>
@@ -130,21 +130,20 @@
   </section>
 
   <section class:active={show_cocktail}>
-    <header><h2>2. Cocktail Reception</h2></header>
+    <header><h2>2. Welcome Reception</h2></header>
 
     {#if show_cocktail}
       <div class="flex two detail">
         <dl>
           <dt>Time</dt>
-          <dd>Friday, October 22<sup>nd</sup> at 07:00 PM PDT</dd>
+          <dd>Friday, October 22<sup>nd</sup> at 06:00 PM PDT</dd>
 
           <dt>Location</dt>
-          <dd><a href="https://vinolocale.org/" target=_blank>Vino Locale</a></dd>
+          <dd><a href="https://www.rosewoodhotels.com/en/sand-hill-menlo-park" target=_blank>Rosewood Sand Hill</a></dd>
 
           <dt>Dress</dt>
           <dd><a
-            href="https://emilypost.com/advice/attire-guide-dress-codes-from-casual-to-white-tie">
-            Dressy Casual</a></dd>
+            href="https://emilypost.com/advice/attire-guide-dress-codes-from-casual-to-white-tie" target=_blank>Semi-Formal</a></dd>
         </dl>
 
         <Location id=ChIJ2S5OXzi7j4ARGnV-XOyU-4g />
