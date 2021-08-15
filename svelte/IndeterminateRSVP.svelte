@@ -8,6 +8,10 @@
   let name = rsvp_info.name
   let noods = rsvp_info.noods
 
+  function format_time(time) {
+    return Intl.DateTimeFormat([], { dateStyle: "long", timeStyle: "long" }).format(new Date(time))
+  }
+
   // Ceremony and Reception //
   // ====================== //
   let reception = saveable("reception", rsvp_info.reception)
@@ -96,6 +100,10 @@
 <form method=POST>
   <header>
     <h1>RSVP Form for {name}</h1>
+
+    {#if rsvp_info.submitted_at != null}
+      <p><strong>Last submitted</strong> on {format_time(rsvp_info.submitted_at)}</p>
+    {/if}
 
     <p>Please complete and submit by September 15<sup>th</sup>. This form will
     remain open for resubmission until then.</p>

@@ -1,5 +1,5 @@
 from marshmallow import Schema
-from marshmallow.fields import Field, Integer, String
+from marshmallow.fields import AwareDateTime, Field, Integer, String
 
 __all__ = ("RSVPSchema",)
 
@@ -35,6 +35,8 @@ class RSVPSchema(Schema):
     phone = String(data_key='mobile', missing=None)
 
     brunch = NumberBool(missing=None)
+
+    submitted_at = AwareDateTime(dump_only=True)
 
 
 class IndeterminateRSVPSchema(RSVPSchema):
