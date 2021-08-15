@@ -12,6 +12,11 @@
     return Intl.DateTimeFormat([], { dateStyle: "long", timeStyle: "long" }).format(new Date(time))
   }
 
+  let link_form
+  function handle_link() {
+    link_form.submit()
+  }
+
   // Ceremony and Reception //
   // ====================== //
   let reception = saveable("reception", rsvp_info.reception)
@@ -97,22 +102,25 @@
 </script>
 
 <main>
-<form method=POST>
-  <header>
-    <h1>RSVP Form for {name}</h1>
+<header>
+  <h1>RSVP Form for {name}</h1>
 
-    {#if rsvp_info.submitted_at != null}
-      <p><strong>Last submitted</strong> on {format_time(rsvp_info.submitted_at)}</p>
-    {/if}
+  {#if rsvp_info.submitted_at != null}
+    <p><strong>Last submitted</strong> on {format_time(rsvp_info.submitted_at)}</p>
+  {/if}
 
-    <p>Please complete and submit by September 15<sup>th</sup>. This form will
-    remain open for resubmission until then.</p>
+  <p>Please complete and submit by September 15<sup>th</sup>. This form will
+  remain open for resubmission until then.</p>
 
+  <form bind:this={link_form} action="https://www.hackersgethitched.com/" method=POST target=_blank>
+    <input type=hidden name="email_address" value={rsvp_info.email}>
     <p>Details and updates on our
-      <a href="https://www.hackersgethitched.com/" target=_blank>wedding website</a>.
+      <a href="https://www.hackersgethitched.com/" target=_blank on:click|preventDefault={handle_link}>wedding website</a>.
     </p>
-  </header>
+  </form>
+</header>
 
+<form method=POST>
   <section class="active">
     <header><h2>1. Ceremony and Reception</h2></header>
 
