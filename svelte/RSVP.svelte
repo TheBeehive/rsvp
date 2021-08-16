@@ -78,7 +78,7 @@
   <h1>RSVP Form for {name}</h1>
 
   {#if rsvp_info.submitted_at != null}
-    <p><strong>Last submitted</strong> on {format_time(rsvp_info.submitted_at)}</p>
+    <p><strong style="color: #0070a0;">Last submitted</strong> on {format_time(rsvp_info.submitted_at)}</p>
   {/if}
 
   <p>Please complete and submit by September 15<sup>th</sup>. This form will
@@ -90,6 +90,8 @@
       <a href="https://www.hackersgethitched.com/" target=_blank on:click|preventDefault={handle_link}>wedding website</a>.
     </p>
   </form>
+
+  <p>Your responses are recorded for yourself only. {plusname} should submit their individual form as well.</p>
 </header>
 
 <form method=POST>
