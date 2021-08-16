@@ -142,7 +142,9 @@
         <dt>Dress</dt>
         <dd><a
           href="https://emilypost.com/advice/attire-guide-dress-codes-from-casual-to-white-tie" target=_blank>
-          Black-Tie Optional</a></dd>
+          Black-Tie Optional</a>
+          <br>
+          Accent colors: green, gold, and slate blue</dd>
 
         <dt>Note</dt>
         <dd>This will be an adults-only (21+) celebration</dd>
