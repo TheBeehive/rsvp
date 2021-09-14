@@ -110,7 +110,7 @@ def get_vaxx(secret_id):
         vaxx_info['status'] = ', '.join(statuses)
 
     if guest.extension is not None:
-        path = os.path.join('upload', f'{guest.id}.{guest.extension}')
+        path = os.path.join('upload', f'{guest.name}.{guest.extension}')
         vaxx_info['on_server'] = url_for('static', filename=path)
 
     return render_template("vaxx.html", vaxx_info=vaxx_info)
@@ -121,7 +121,7 @@ def post_vaxx(secret_id):
     vaxx_info = { 'name': guest.name }
 
     if guest.extension is not None:
-        path = os.path.join('upload', f'{guest.id}.{guest.extension}')
+        path = os.path.join('upload', f'{guest.name}.{guest.extension}')
         vaxx_info['on_server'] = url_for('static', filename=path)
 
     file = request.files.get('file')
@@ -136,7 +136,7 @@ def post_vaxx(secret_id):
         return render_template("vaxx.html", vaxx_info=vaxx_info)
     extension = extension[1:]
 
-    file.save(os.path.join(upload_folder, f'{guest.id}.{extension}'))
+    file.save(os.path.join(upload_folder, f'{guest.name}.{extension}'))
 
     guest.extension = extension
     Session.commit()
