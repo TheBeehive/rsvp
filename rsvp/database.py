@@ -24,6 +24,7 @@ class Guest(Base):
     invited_to_brunch = Column(Boolean, nullable=False)
     secret_id = Column(UUID(as_uuid=True), nullable=False,
             server_default=FetchedValue())
+    extension = Column(String)
 
     plus_one = relationship('Guest', remote_side=[id], post_update=True)
     rsvps = relationship('RSVP', back_populates='guest')

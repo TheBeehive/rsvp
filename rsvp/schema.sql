@@ -6,7 +6,8 @@ CREATE TABLE guest (
   plus_one_id INTEGER REFERENCES guest(id),
   email TEXT NOT NULL,
   invited_to_brunch BOOLEAN NOT NULL DEFAULT FALSE,
-  secret_id UUID NOT NULL UNIQUE DEFAULT gen_random_uuid()
+  secret_id UUID NOT NULL UNIQUE DEFAULT gen_random_uuid(),
+  extension TEXT
 );
 
 DROP TABLE IF EXISTS rsvp CASCADE;
