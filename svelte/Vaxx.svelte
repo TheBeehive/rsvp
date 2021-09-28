@@ -62,7 +62,7 @@
     <form enctype="multipart/form-data" method=POST bind:this={upload_form}>
       <label class="upload pseudo button">
         Upload
-        <input type=file name=file accept="image/*,.pdf" capture=environment on:change={upload_form.submit()}>
+        <input type=file name=file accept="image/*,.pdf" on:change={upload_form.submit()}>
       </label>
     </form>
   {/if}
