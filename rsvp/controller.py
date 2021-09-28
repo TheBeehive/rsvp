@@ -46,8 +46,8 @@ def get_rsvp(secret_id):
         .one_or_none()
 
     ### Form Closed ###
-    # wedding = rsvp is not None and rsvp.wedding
-    # return render_template('gone.html', wedding=wedding), 410
+    wedding = rsvp is not None and rsvp.wedding
+    return render_template('gone.html', wedding=wedding), 410
     ### Form Closed ###
 
     rsvp_info = {
@@ -76,13 +76,13 @@ def post_rsvp(secret_id):
             .one()
 
     ### Form Closed ###
-    # rsvp = RSVP.query.filter(RSVP.guest_id == guest.id) \
-    #     .distinct(RSVP.guest_id) \
-    #     .order_by(RSVP.guest_id, RSVP.submitted_at.desc()) \
-    #     .one_or_none()
+    rsvp = RSVP.query.filter(RSVP.guest_id == guest.id) \
+        .distinct(RSVP.guest_id) \
+        .order_by(RSVP.guest_id, RSVP.submitted_at.desc()) \
+        .one_or_none()
 
-    # wedding = rsvp is not None and rsvp.wedding
-    # return render_template('gone.html', wedding=wedding), 410
+    wedding = rsvp is not None and rsvp.wedding
+    return render_template('gone.html', wedding=wedding), 410
     ### Form Closed ###
 
     # .with_for_update(read=False, key_share=True) \
