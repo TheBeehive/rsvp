@@ -38,6 +38,10 @@
 <main>
 <header>
   <h1>Vaccination Card for {vaxx_info.name}</h1>
+
+  {#if vaxx_info.status != 'Upload succeeded' }
+    <p>Please upload your proof of vaccination. Otherwise, you <strong>must</strong> render it in person at the wedding, or we <strong>will</strong> deny you entrance into the event.</p>
+  {/if}
 </header>
 
 {#if vaxx_info.on_server}
@@ -71,7 +75,7 @@
 </main>
 
 <style>
-header {
+header > h1 {
   text-align: center;
 }
 
